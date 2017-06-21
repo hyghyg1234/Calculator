@@ -39,17 +39,7 @@ namespace 计算器
             for (int i = 0; i < 11; i++)
             {
                 butList[i].Click += new System.EventHandler(this.butlist_Click);
-                butList[i].MouseDown += new System.Windows.Forms.MouseEventHandler(this.butlist_MouseDown);
             }
-        }
-
-        Point buttonPoint = new Point(1, 2);
-
-        private void butlist_MouseDown(object sender, MouseEventArgs e)
-        {
-            buttonPoint.X = e.X;
-            buttonPoint.Y = e.Y;
-            textBox2.Text = (buttonPoint.X).ToString() + "    " + (buttonPoint.Y).ToString();
         }
 
         private void butlist_Click(object sender, EventArgs e)
@@ -67,22 +57,13 @@ namespace 计算器
             {
                 if ((PointX >= butList[i].Location.X) && (PointX <= butList[i].Location.X + 35) && (PointY >= butList[i].Location.Y) && (PointY <= butList[i].Location.Y + 35))
                 {
-                    textBox3.Text = PointX.ToString() + "   " + PointY.ToString();
-                    num[but_flag] = num[but_flag] + i.ToString();
-                    textBox1.Text = num[but_flag];
+                    //textBox3.Text = PointX.ToString() + "   " + PointY.ToString();
+                    numList[but_flag] = numList[but_flag] + i.ToString();
+                    textBox1.Text = numList[but_flag];
                 }
-            }
-            
-            
-
-            textBox2.Text = this.butList[0].Location.ToString();
-            
+            }           
+            //textBox2.Text = this.butList[0].Location.ToString();           
         }
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    num[but_flag] = num[but_flag] + "2";
-        //    textBox1.Text = num[but_flag];       
-        //}      
 
         private void button16_Click(object sender, EventArgs e)
         {
@@ -98,45 +79,58 @@ namespace 计算器
 
         private void button10_Click(object sender, EventArgs e)
         {
+            numList.Add("");
             but_flag++;
             flag = "+";
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
+            numList.Add("");
             but_flag++;
             flag = "-";
         }
 
         private void button12_Click(object sender, EventArgs e)
         {
+            numList.Add("");
             but_flag++;
             flag = "*";
         }
 
         private void button13_Click(object sender, EventArgs e)
         {
+            numList.Add("");
             but_flag++;
             flag = "/";
         }
 
         private void button14_Click(object sender, EventArgs e)
         {
-            int res = 0;
+            long res = 0;
+
+            if (but_flag == 0)
+            {
+                return;     //跳出函数
+            }
             if (flag == "+")
             {
-                while (but_flag >= 0)
-                {
-                    res =res+ Convert.ToInt16(num[but_flag]);
-                    but_flag--;
-                }              
+                res = Convert.ToInt64(numList[but_flag]) + Convert.ToInt64(numList[but_flag - 1]);
             }
+            else if (flag == "*")
+            {
+                res = Convert.ToInt64(numList[but_flag]) * Convert.ToInt64(numList[but_flag - 1]);
+            }
+            but_flag = 0;
+            numList.Clear();
+            numList.Add("");
             textBox1.Text = res.ToString();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             list_Add();
+            numList.Add("");
             panel1Position = this.panel1.Location;
             textBox2.Text = panel1Position.ToString();
         }
