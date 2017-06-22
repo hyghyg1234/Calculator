@@ -17,8 +17,10 @@ namespace 计算器
         }
 
         string[] num = new string[100];
-        string flag;
+        string flag = null;
         Point panel1Position;
+        int but_flag = 0;
+        List<string> symbol = new List<string>() { "+", "-", "*", "/" };
 
         List<Button> butList = new List<Button>();
         List<string> numList = new List<string>();
@@ -34,15 +36,59 @@ namespace 计算器
             butList.Add(num6);
             butList.Add(num7);
             butList.Add(num8);
-            butList.Add(num9);            
-            butList.Add(button16);
-            for (int i = 0; i < 11; i++)
+            butList.Add(num9);
+
+            butList.Add(button10);
+            butList.Add(button11);
+            butList.Add(button12);
+            butList.Add(button13);
+            for (int i = 0; i < 10; i++)
             {
-                butList[i].Click += new System.EventHandler(this.butlist_Click);
+                butList[i].Click += new System.EventHandler(this.Num_Click);
+            }
+            for (int i = 10; i < 14; i++)
+            {
+                butList[i].Click += new System.EventHandler(this.Symbol_Click);
             }
         }
 
-        private void butlist_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 符号按键事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Symbol_Click(object sender, EventArgs e)
+        {
+            //鼠标相对于屏幕的坐标
+            Point p1 = MousePosition;
+            //鼠标相对于窗体的坐标
+            Point p2 = this.PointToClient(MousePosition);
+
+            //计算出按键相对于panel的坐标
+            int PointX = p2.X - panel1Position.X;
+            int PointY = p2.Y - panel1Position.Y;
+
+            for (int i = 10; i < 14; i++)
+            {
+                if ((PointX >= butList[i].Location.X) && (PointX <= butList[i].Location.X + 35) && (PointY >= butList[i].Location.Y) && (PointY <= butList[i].Location.Y + 35))
+                {                   
+                    if (flag == null)
+                    {
+                        but_flag++;
+                        numList.Add("");
+                    }
+                    flag = symbol[i - 10];
+                    label1.Text = flag;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 数字按键事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Num_Click(object sender, EventArgs e)
         {
             //鼠标相对于屏幕的坐标
             Point p1 = MousePosition;
@@ -57,12 +103,10 @@ namespace 计算器
             {
                 if ((PointX >= butList[i].Location.X) && (PointX <= butList[i].Location.X + 35) && (PointY >= butList[i].Location.Y) && (PointY <= butList[i].Location.Y + 35))
                 {
-                    //textBox3.Text = PointX.ToString() + "   " + PointY.ToString();
                     numList[but_flag] = numList[but_flag] + i.ToString();
                     textBox1.Text = numList[but_flag];
                 }
-            }           
-            //textBox2.Text = this.butList[0].Location.ToString();           
+            }                     
         }
 
         private void button16_Click(object sender, EventArgs e)
@@ -73,36 +117,6 @@ namespace 计算器
         private void button17_Click(object sender, EventArgs e)
         {
 
-        }
-
-        int but_flag = 0;
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            numList.Add("");
-            but_flag++;
-            flag = "+";
-        }
-
-        private void button11_Click(object sender, EventArgs e)
-        {
-            numList.Add("");
-            but_flag++;
-            flag = "-";
-        }
-
-        private void button12_Click(object sender, EventArgs e)
-        {
-            numList.Add("");
-            but_flag++;
-            flag = "*";
-        }
-
-        private void button13_Click(object sender, EventArgs e)
-        {
-            numList.Add("");
-            but_flag++;
-            flag = "/";
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -121,6 +135,7 @@ namespace 计算器
             {
                 res = Convert.ToInt64(numList[but_flag]) * Convert.ToInt64(numList[but_flag - 1]);
             }
+            flag = null;
             but_flag = 0;
             numList.Clear();
             numList.Add("");
@@ -132,7 +147,6 @@ namespace 计算器
             list_Add();
             numList.Add("");
             panel1Position = this.panel1.Location;
-            textBox2.Text = panel1Position.ToString();
         }
     }
 }
