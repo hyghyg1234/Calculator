@@ -21,6 +21,7 @@ namespace 计算器
         Point panel1Position;
         int but_flag = 0;
         bool symbolEqual = false;
+        string modeFlag;
         List<string> symbol = new List<string>() { "+", "-", "*", "/" };
         List<string> numList = new List<string>() { "", "" };
         List<Button> butList = new List<Button>();
@@ -74,6 +75,12 @@ namespace 计算器
                 {                   
                     flag = symbol[i - 10];
                     label1.Text = flag;
+
+                    if (modeFlag == "1")
+                    {
+                        modeFlag = "2";
+                    }
+                    textBox2.Text = modeFlag;
                 }
             }
         }
@@ -108,6 +115,20 @@ namespace 计算器
                         numList[1] = numList[1] + i.ToString();
                         textBox1.Text = numList[1];
                     }
+                    if (Cflag == true)  //表示还未按下任何按键
+                    {
+                        Cflag = false;
+                        modeFlag = "1";
+                    }
+                    else
+                    {
+                        if (modeFlag == "2")
+                        {
+                            modeFlag = "3";
+                        }
+                    }
+
+                    textBox2.Text = modeFlag;
                 }
             }                     
         }
@@ -163,6 +184,19 @@ namespace 计算器
         {
             list_Add();
             panel1Position = this.panel1.Location;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        bool Cflag = true;
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Cflag = true;
+            textBox1.Text = "0";
+            textBox2.Text = "0";
         }
     }
 }
